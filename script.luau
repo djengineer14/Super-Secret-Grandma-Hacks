@@ -1,5 +1,5 @@
 -- Super Secret Grandma Hacks (SSGH)
--- Mobile Hacks GUI
+-- Mobile Hacks GUI - Grandma Edition
 
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
@@ -22,11 +22,11 @@ screenGui.ResetOnSpawn = false
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screenGui.IgnoreGuiInset = true
 
--- Main Frame (smaller for phone)
+-- Main Frame (bigger for grandma)
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 220, 0, math.min(screenSize.Y - 60, 380))
-mainFrame.Position = UDim2.new(1, -225, 0.5, -math.min(screenSize.Y - 60, 380)/2)
+mainFrame.Size = UDim2.new(0, 300, 0, math.min(screenSize.Y - 80, 450))
+mainFrame.Position = UDim2.new(1, -310, 0.5, -math.min(screenSize.Y - 80, 450)/2)
 mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 mainFrame.BorderSizePixel = 0
 mainFrame.ZIndex = 10
@@ -35,36 +35,36 @@ mainFrame.Parent = screenGui
 -- Title
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Name = "Title"
-titleLabel.Size = UDim2.new(1, 0, 0, 22)
+titleLabel.Size = UDim2.new(1, 0, 0, 30)
 titleLabel.Position = UDim2.new(0, 0, 0, 0)
 titleLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 titleLabel.BorderSizePixel = 0
 titleLabel.Text = "Super Secret Grandma Hacks"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.Font = Enum.Font.SourceSansBold
-titleLabel.TextSize = 11
+titleLabel.TextSize = 16
 titleLabel.ZIndex = 11
 titleLabel.Parent = mainFrame
 
 -- Close/Open Button
 local toggleButton = Instance.new("TextButton")
 toggleButton.Name = "ToggleButton"
-toggleButton.Size = UDim2.new(0, 22, 0, 22)
-toggleButton.Position = UDim2.new(1, -22, 0, 0)
+toggleButton.Size = UDim2.new(0, 30, 0, 30)
+toggleButton.Position = UDim2.new(1, -30, 0, 0)
 toggleButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 toggleButton.BorderSizePixel = 0
 toggleButton.Text = "-"
 toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggleButton.Font = Enum.Font.SourceSansBold
-toggleButton.TextSize = 16
+toggleButton.TextSize = 22
 toggleButton.ZIndex = 11
 toggleButton.Parent = mainFrame
 
 -- Tab Frame
 local tabFrame = Instance.new("Frame")
 tabFrame.Name = "TabFrame"
-tabFrame.Size = UDim2.new(1, 0, 0, 20)
-tabFrame.Position = UDim2.new(0, 0, 0, 22)
+tabFrame.Size = UDim2.new(1, 0, 0, 28)
+tabFrame.Position = UDim2.new(0, 0, 0, 30)
 tabFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 tabFrame.BorderSizePixel = 0
 tabFrame.ZIndex = 10
@@ -73,25 +73,36 @@ tabFrame.Parent = mainFrame
 -- Content Frame
 local contentFrame = Instance.new("Frame")
 contentFrame.Name = "ContentFrame"
-contentFrame.Size = UDim2.new(1, 0, 1, -42)
-contentFrame.Position = UDim2.new(0, 0, 0, 42)
+contentFrame.Size = UDim2.new(1, 0, 1, -58)
+contentFrame.Position = UDim2.new(0, 0, 0, 58)
 contentFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 contentFrame.BorderSizePixel = 0
 contentFrame.ZIndex = 10
 contentFrame.Parent = mainFrame
 
--- Rainbow Title Animation
-local function rainbowEffect()
+-- Glitchy Rainbow Title Animation
+local function rainbowGlitchEffect()
     local hue = tick() * 0.5 % 1
     local color = Color3.fromHSV(hue, 1, 1)
     titleLabel.TextColor3 = color
+    
+    -- Glitchy scrambled effect on individual characters
+    local chars = {"S","u","p","e","r"," ","S","e","c","r","e","t"," ","G","r","a","n","d","m","a"," ","H","a","c","k","s"}
+    local text = ""
+    for i, char in ipairs(chars) do
+        local charHue = (tick() * 0.3 + i * 0.13) % 1
+        local charColor = Color3.fromHSV(charHue, 1, 1)
+        text = text .. "<font color=\"rgb(" .. math.floor(charColor.R * 255) .. "," .. math.floor(charColor.G * 255) .. "," .. math.floor(charColor.B * 255) .. ")\">" .. char .. "</font>"
+    end
+    titleLabel.RichText = true
+    titleLabel.Text = text
 end
 
 spawn(function()
     while true do
         RunService.RenderStepped:Wait()
         if screenGui and screenGui.Parent then
-            rainbowEffect()
+            rainbowGlitchEffect()
         else
             break
         end
@@ -113,7 +124,7 @@ local isOpen = true
 toggleButton.MouseButton1Click:Connect(function()
     playSound("87437544236708")
     if isOpen then
-        mainFrame:TweenSize(UDim2.new(0, 220, 0, 22), "Out", "Quad", 0.3, true)
+        mainFrame:TweenSize(UDim2.new(0, 300, 0, 30), "Out", "Quad", 0.3, true)
         toggleButton.Text = "+"
         for _, v in pairs(mainFrame:GetChildren()) do
             if v ~= toggleButton and v.Name ~= "Title" then
@@ -122,7 +133,7 @@ toggleButton.MouseButton1Click:Connect(function()
         end
         titleLabel.Visible = true
     else
-        mainFrame:TweenSize(UDim2.new(0, 220, 0, math.min(screenSize.Y - 60, 380)), "Out", "Quad", 0.3, true)
+        mainFrame:TweenSize(UDim2.new(0, 300, 0, math.min(screenSize.Y - 80, 450)), "Out", "Quad", 0.3, true)
         toggleButton.Text = "-"
         for _, v in pairs(mainFrame:GetChildren()) do
             v.Visible = true
@@ -135,16 +146,16 @@ end)
 local tabButtons = {}
 local tabPages = {}
 
-local function createTab(name, position)
+local function createTab(name, position, tabCount)
     local button = Instance.new("TextButton")
-    button.Size = UDim2.new(0.5, 0, 1, 0)
+    button.Size = UDim2.new(1/tabCount, 0, 1, 0)
     button.Position = UDim2.new(position, 0, 0, 0)
     button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     button.BorderSizePixel = 0
     button.Text = name
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    button.Font = Enum.Font.SourceSans
-    button.TextSize = 11
+    button.Font = Enum.Font.SourceSansBold
+    button.TextSize = 14
     button.ZIndex = 11
     button.Parent = tabFrame
 
@@ -153,7 +164,7 @@ local function createTab(name, position)
     page.Position = UDim2.new(0, 0, 0, 0)
     page.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     page.BorderSizePixel = 0
-    page.ScrollBarThickness = 3
+    page.ScrollBarThickness = 6
     page.Visible = false
     page.CanvasSize = UDim2.new(0, 0, 0, 0)
     page.ScrollingDirection = Enum.ScrollingDirection.Y
@@ -177,52 +188,143 @@ local function createTab(name, position)
     return page
 end
 
-local mainPage = createTab("Main", 0)
-local trollPage = createTab("Troll", 0.5)
+local mainPage = createTab("Main", 0, 3)
+local trollPage = createTab("Troll", 1/3, 3)
+local settingsPage = createTab("Settings", 2/3, 3)
 tabButtons[1].BackgroundColor3 = Color3.fromRGB(70, 70, 70)
 tabPages[1].Visible = true
 
 -- UI List Layout for pages
 local mainList = Instance.new("UIListLayout")
-mainList.Padding = UDim.new(0, 2)
+mainList.Padding = UDim.new(0, 3)
 mainList.SortOrder = Enum.SortOrder.LayoutOrder
 mainList.Parent = mainPage
 
 local trollList = Instance.new("UIListLayout")
-trollList.Padding = UDim.new(0, 2)
+trollList.Padding = UDim.new(0, 3)
 trollList.SortOrder = Enum.SortOrder.LayoutOrder
 trollList.Parent = trollPage
 
--- Create Toggle Element Function
-local function createToggle(page, text, callback)
+local settingsList = Instance.new("UIListLayout")
+settingsList.Padding = UDim.new(0, 3)
+settingsList.SortOrder = Enum.SortOrder.LayoutOrder
+settingsList.Parent = settingsPage
+
+-- Create Info Popup Function
+local function showInfo(text)
+    local infoGui = Instance.new("ScreenGui")
+    infoGui.Name = "InfoGui"
+    infoGui.Parent = player:WaitForChild("PlayerGui")
+    infoGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    infoGui.IgnoreGuiInset = true
+    
+    local infoFrame = Instance.new("Frame")
+    infoFrame.Size = UDim2.new(0, 250, 0, 100)
+    infoFrame.Position = UDim2.new(0.5, -125, 0.5, -50)
+    infoFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    infoFrame.BorderSizePixel = 0
+    infoFrame.ZIndex = 200
+    infoFrame.Parent = infoGui
+    
+    local infoLabel = Instance.new("TextLabel")
+    infoLabel.Size = UDim2.new(1, -20, 0.7, 0)
+    infoLabel.Position = UDim2.new(0, 10, 0, 5)
+    infoLabel.BackgroundTransparency = 1
+    infoLabel.Text = text
+    infoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    infoLabel.Font = Enum.Font.SourceSansBold
+    infoLabel.TextSize = 14
+    infoLabel.TextWrapped = true
+    infoLabel.ZIndex = 201
+    infoLabel.Parent = infoFrame
+    
+    local closeButton = Instance.new("TextButton")
+    closeButton.Size = UDim2.new(0, 80, 0, 30)
+    closeButton.Position = UDim2.new(0.5, -40, 0.7, 5)
+    closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    closeButton.BorderSizePixel = 0
+    closeButton.Text = "OK GOT IT!"
+    closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeButton.Font = Enum.Font.SourceSansBold
+    closeButton.TextSize = 16
+    closeButton.ZIndex = 201
+    closeButton.Parent = infoFrame
+    
+    closeButton.MouseButton1Click:Connect(function()
+        playSound("87437544236708")
+        infoGui:Destroy()
+    end)
+    
+    -- Auto close after 8 seconds
+    spawn(function()
+        wait(8)
+        if infoGui and infoGui.Parent then
+            infoGui:Destroy()
+        end
+    end)
+end
+
+-- Create Toggle Element Function (with arrow and info button)
+local function createToggle(page, text, description, callback)
     local toggleFrame = Instance.new("Frame")
-    toggleFrame.Size = UDim2.new(1, -4, 0, 24)
+    toggleFrame.Size = UDim2.new(1, -4, 0, 36)
     toggleFrame.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
     toggleFrame.BorderSizePixel = 0
     toggleFrame.ZIndex = 10
     toggleFrame.Parent = page
 
+    -- Info Button (?) 
+    local infoButton = Instance.new("TextButton")
+    infoButton.Size = UDim2.new(0, 22, 0, 22)
+    infoButton.Position = UDim2.new(0, 4, 0.5, -11)
+    infoButton.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
+    infoButton.BorderSizePixel = 0
+    infoButton.Text = "?"
+    infoButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    infoButton.Font = Enum.Font.SourceSansBold
+    infoButton.TextSize = 16
+    infoButton.ZIndex = 12
+    infoButton.Parent = toggleFrame
+    
+    infoButton.MouseButton1Click:Connect(function()
+        playSound("87437544236708")
+        showInfo(description)
+    end)
+
+    -- Arrow pointing from text to button
+    local arrow = Instance.new("TextLabel")
+    arrow.Size = UDim2.new(0, 20, 1, 0)
+    arrow.Position = UDim2.new(0, 28, 0, 0)
+    arrow.BackgroundTransparency = 1
+    arrow.Text = "→"
+    arrow.TextColor3 = Color3.fromRGB(255, 255, 0)
+    arrow.Font = Enum.Font.SourceSansBold
+    arrow.TextSize = 18
+    arrow.TextXAlignment = Enum.TextXAlignment.Center
+    arrow.ZIndex = 11
+    arrow.Parent = toggleFrame
+
     local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(0.65, 0, 1, 0)
-    label.Position = UDim2.new(0, 3, 0, 0)
+    label.Size = UDim2.new(0.5, 0, 1, 0)
+    label.Position = UDim2.new(0, 50, 0, 0)
     label.BackgroundTransparency = 1
     label.Text = text
     label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    label.Font = Enum.Font.SourceSans
-    label.TextSize = 10
+    label.Font = Enum.Font.SourceSansBold
+    label.TextSize = 14
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.ZIndex = 11
     label.Parent = toggleFrame
 
     local toggle = Instance.new("TextButton")
-    toggle.Size = UDim2.new(0, 32, 0, 16)
-    toggle.Position = UDim2.new(1, -35, 0.5, -8)
+    toggle.Size = UDim2.new(0, 50, 0, 28)
+    toggle.Position = UDim2.new(1, -55, 0.5, -14)
     toggle.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
     toggle.BorderSizePixel = 0
     toggle.Text = "OFF"
     toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
     toggle.Font = Enum.Font.SourceSansBold
-    toggle.TextSize = 9
+    toggle.TextSize = 14
     toggle.ZIndex = 11
     toggle.Parent = toggleFrame
 
@@ -239,63 +341,82 @@ local function createToggle(page, text, callback)
         end
     end)
 
-    page.CanvasSize = UDim2.new(0, 0, 0, page.CanvasSize.Y.Offset + 26)
+    page.CanvasSize = UDim2.new(0, 0, 0, page.CanvasSize.Y.Offset + 38)
     return toggle
 end
 
--- Create Slider Element Function
-local function createSlider(page, text, min, max, default, callback)
+-- Create Slider Element Function (bigger for grandma)
+local function createSlider(page, text, min, max, default, description, callback)
     local sliderFrame = Instance.new("Frame")
-    sliderFrame.Size = UDim2.new(1, -4, 0, 45)
+    sliderFrame.Size = UDim2.new(1, -4, 0, 60)
     sliderFrame.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
     sliderFrame.BorderSizePixel = 0
     sliderFrame.ZIndex = 10
     sliderFrame.Parent = page
 
+    -- Info Button
+    local infoButton = Instance.new("TextButton")
+    infoButton.Size = UDim2.new(0, 22, 0, 22)
+    infoButton.Position = UDim2.new(0, 4, 0.2, -5)
+    infoButton.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
+    infoButton.BorderSizePixel = 0
+    infoButton.Text = "?"
+    infoButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    infoButton.Font = Enum.Font.SourceSansBold
+    infoButton.TextSize = 16
+    infoButton.ZIndex = 12
+    infoButton.Parent = sliderFrame
+    
+    infoButton.MouseButton1Click:Connect(function()
+        playSound("87437544236708")
+        showInfo(description)
+    end)
+
     local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(1, 0, 0, 16)
-    label.Position = UDim2.new(0, 3, 0, 0)
+    label.Size = UDim2.new(0.6, 0, 0, 20)
+    label.Position = UDim2.new(0, 30, 0, 2)
     label.BackgroundTransparency = 1
     label.Text = text .. ": " .. default
     label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    label.Font = Enum.Font.SourceSans
-    label.TextSize = 10
+    label.Font = Enum.Font.SourceSansBold
+    label.TextSize = 14
+    label.TextXAlignment = Enum.TextXAlignment.Left
     label.ZIndex = 11
     label.Parent = sliderFrame
 
     local minusButton = Instance.new("TextButton")
-    minusButton.Size = UDim2.new(0, 22, 0, 20)
-    minusButton.Position = UDim2.new(0, 2, 0.6, -5)
+    minusButton.Size = UDim2.new(0, 30, 0, 26)
+    minusButton.Position = UDim2.new(0, 4, 0.65, -5)
     minusButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
     minusButton.BorderSizePixel = 0
     minusButton.Text = "-"
     minusButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     minusButton.Font = Enum.Font.SourceSansBold
-    minusButton.TextSize = 14
+    minusButton.TextSize = 20
     minusButton.ZIndex = 11
     minusButton.Parent = sliderFrame
 
     local setButton = Instance.new("TextButton")
-    setButton.Size = UDim2.new(0, 30, 0, 20)
-    setButton.Position = UDim2.new(0.5, -15, 0.6, -5)
+    setButton.Size = UDim2.new(0, 45, 0, 26)
+    setButton.Position = UDim2.new(0.5, -22, 0.65, -5)
     setButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
     setButton.BorderSizePixel = 0
     setButton.Text = "SET"
     setButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     setButton.Font = Enum.Font.SourceSansBold
-    setButton.TextSize = 9
+    setButton.TextSize = 14
     setButton.ZIndex = 11
     setButton.Parent = sliderFrame
 
     local plusButton = Instance.new("TextButton")
-    plusButton.Size = UDim2.new(0, 22, 0, 20)
-    plusButton.Position = UDim2.new(1, -24, 0.6, -5)
+    plusButton.Size = UDim2.new(0, 30, 0, 26)
+    plusButton.Position = UDim2.new(1, -34, 0.65, -5)
     plusButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
     plusButton.BorderSizePixel = 0
     plusButton.Text = "+"
     plusButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     plusButton.Font = Enum.Font.SourceSansBold
-    plusButton.TextSize = 14
+    plusButton.TextSize = 20
     plusButton.ZIndex = 11
     plusButton.Parent = sliderFrame
 
@@ -319,113 +440,8 @@ local function createSlider(page, text, min, max, default, callback)
         end
     end)
 
-    page.CanvasSize = UDim2.new(0, 0, 0, page.CanvasSize.Y.Offset + 47)
+    page.CanvasSize = UDim2.new(0, 0, 0, page.CanvasSize.Y.Offset + 62)
     return {minusButton, plusButton, setButton, label}
-end
-
--- Settings Tab
-local settingsButton = Instance.new("TextButton")
-settingsButton.Size = UDim2.new(0, 20, 0, 20)
-settingsButton.Position = UDim2.new(0, 2, 0, 1)
-settingsButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-settingsButton.BorderSizePixel = 0
-settingsButton.Text = "S"
-settingsButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-settingsButton.Font = Enum.Font.SourceSansBold
-settingsButton.TextSize = 10
-settingsButton.ZIndex = 11
-settingsButton.Parent = mainFrame
-
-local settingsPage = Instance.new("Frame")
-settingsPage.Size = UDim2.new(1, 0, 1, -42)
-settingsPage.Position = UDim2.new(0, 0, 0, 42)
-settingsPage.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-settingsPage.BorderSizePixel = 0
-settingsPage.Visible = false
-settingsPage.ZIndex = 10
-settingsPage.Parent = mainFrame
-
-local settingsList = Instance.new("UIListLayout")
-settingsList.Padding = UDim.new(0, 2)
-settingsList.SortOrder = Enum.SortOrder.LayoutOrder
-settingsList.Parent = settingsPage
-
-settingsButton.MouseButton1Click:Connect(function()
-    playSound("87437544236708")
-    local showing = not settingsPage.Visible
-    for _, p in pairs(tabPages) do
-        p.Visible = false
-    end
-    contentFrame.Visible = not showing
-    settingsPage.Visible = showing
-    for _, b in pairs(tabButtons) do
-        b.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    end
-end)
-
--- Settings Content
-local colorLabel = Instance.new("TextLabel")
-colorLabel.Size = UDim2.new(1, -4, 0, 20)
-colorLabel.Position = UDim2.new(0, 2, 0, 2)
-colorLabel.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
-colorLabel.BorderSizePixel = 0
-colorLabel.Text = "UI Color Presets"
-colorLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-colorLabel.Font = Enum.Font.SourceSans
-colorLabel.TextSize = 10
-colorLabel.ZIndex = 11
-colorLabel.Parent = settingsPage
-
-local colors = {
-    {name = "Gray", color = Color3.fromRGB(40, 40, 40)},
-    {name = "Blue", color = Color3.fromRGB(30, 30, 80)},
-    {name = "Red", color = Color3.fromRGB(80, 30, 30)},
-    {name = "Green", color = Color3.fromRGB(30, 80, 30)},
-    {name = "Purple", color = Color3.fromRGB(60, 30, 80)},
-    {name = "Black", color = Color3.fromRGB(20, 20, 20)}
-}
-
-for i, colorData in ipairs(colors) do
-    local colorButton = Instance.new("TextButton")
-    colorButton.Size = UDim2.new(0.9, 0, 0, 20)
-    colorButton.Position = UDim2.new(0.05, 0, 0, 2 + (i * 22))
-    colorButton.BackgroundColor3 = colorData.color
-    colorButton.BorderSizePixel = 0
-    colorButton.Text = colorData.name
-    colorButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    colorButton.Font = Enum.Font.SourceSans
-    colorButton.TextSize = 10
-    colorButton.ZIndex = 11
-    colorButton.Parent = settingsPage
-
-    colorButton.MouseButton1Click:Connect(function()
-        playSound("87437544236708")
-        -- Store color values
-        local mainColor = colorData.color
-        local contentColor = Color3.fromRGB(
-            math.clamp(math.floor(mainColor.R * 255 + 5), 0, 255) / 255,
-            math.clamp(math.floor(mainColor.G * 255 + 5), 0, 255) / 255,
-            math.clamp(math.floor(mainColor.B * 255 + 5), 0, 255) / 255
-        )
-        
-        -- Apply colors
-        mainFrame.BackgroundColor3 = mainColor
-        contentFrame.BackgroundColor3 = contentColor
-        
-        -- Update tab frame
-        tabFrame.BackgroundColor3 = Color3.fromRGB(
-            math.clamp(math.floor(mainColor.R * 255 - 5), 0, 255) / 255,
-            math.clamp(math.floor(mainColor.G * 255 - 5), 0, 255) / 255,
-            math.clamp(math.floor(mainColor.B * 255 - 5), 0, 255) / 255
-        )
-        
-        -- Update title
-        titleLabel.BackgroundColor3 = Color3.fromRGB(
-            math.clamp(math.floor(mainColor.R * 255 - 10), 0, 255) / 255,
-            math.clamp(math.floor(mainColor.G * 255 - 10), 0, 255) / 255,
-            math.clamp(math.floor(mainColor.B * 255 - 10), 0, 255) / 255
-        )
-    end)
 end
 
 -- Variables for features
@@ -434,6 +450,9 @@ local clickToMoveEnabled = false
 local autoJumpEnabled = false
 local espEnabled = false
 local xrayEnabled = false
+local walkOnAirEnabled = false
+local walkOnAirPad = nil
+local walkOnAirConnection = nil
 local spectating = false
 local spectateTarget = nil
 local espConnections = {}
@@ -442,6 +461,59 @@ local pathConnection = nil
 local clickMarker = nil
 local cancelMoveButton = nil
 
+-- Create Purple Pad for Walk on Air
+local function createWalkOnAirPad()
+    if walkOnAirPad then
+        walkOnAirPad:Destroy()
+        walkOnAirPad = nil
+    end
+    
+    walkOnAirPad = Instance.new("Part")
+    walkOnAirPad.Size = Vector3.new(6, 0.3, 6)
+    walkOnAirPad.Anchored = true
+    walkOnAirPad.CanCollide = true
+    walkOnAirPad.BrickColor = BrickColor.new("Royal purple")
+    walkOnAirPad.Material = Enum.Material.Neon
+    walkOnAirPad.Transparency = 0.3
+    walkOnAirPad.Parent = workspace
+    
+    -- Add glow effect
+    local attachment0 = Instance.new("Attachment")
+    attachment0.Position = Vector3.new(0, -0.15, 0)
+    attachment0.Parent = walkOnAirPad
+    
+    local attachment1 = Instance.new("Attachment")
+    attachment1.Position = Vector3.new(0, 0.15, 0)
+    attachment1.Parent = walkOnAirPad
+    
+    local beam = Instance.new("Beam")
+    beam.Attachment0 = attachment0
+    beam.Attachment1 = attachment1
+    beam.Color = ColorSequence.new(Color3.fromRGB(170, 0, 255))
+    beam.Width0 = 6
+    beam.Width1 = 6
+    beam.Parent = walkOnAirPad
+    
+    -- Particle effect
+    local particleEmitter = Instance.new("ParticleEmitter")
+    particleEmitter.Texture = "rbxassetid://132695252585030"
+    particleEmitter.Rate = 20
+    particleEmitter.Lifetime = NumberRange.new(0.5, 1)
+    particleEmitter.Speed = NumberRange.new(1, 3)
+    particleEmitter.SpreadAngle = Vector2.new(180, 180)
+    particleEmitter.Color = ColorSequence.new(Color3.fromRGB(170, 0, 255))
+    particleEmitter.Size = NumberSequence.new(0.2)
+    particleEmitter.Transparency = NumberSequence.new(0.5)
+    particleEmitter.Parent = walkOnAirPad
+end
+
+local function removeWalkOnAirPad()
+    if walkOnAirPad then
+        walkOnAirPad:Destroy()
+        walkOnAirPad = nil
+    end
+end
+
 -- Create Click Marker
 local function createClickMarker(position)
     if clickMarker then
@@ -449,7 +521,7 @@ local function createClickMarker(position)
     end
     
     clickMarker = Instance.new("Part")
-    clickMarker.Size = Vector3.new(0.2, 0.2, 0.2)
+    clickMarker.Size = Vector3.new(0.3, 0.3, 0.3)
     clickMarker.Position = position
     clickMarker.Anchored = true
     clickMarker.CanCollide = false
@@ -457,7 +529,6 @@ local function createClickMarker(position)
     clickMarker.Material = Enum.Material.Neon
     clickMarker.Parent = workspace
     
-    -- Add a beam or cylinder to make it more visible
     local attachment0 = Instance.new("Attachment")
     attachment0.Position = Vector3.new(0, 0, 0)
     attachment0.Parent = clickMarker
@@ -470,11 +541,10 @@ local function createClickMarker(position)
     beam.Attachment0 = attachment0
     beam.Attachment1 = attachment1
     beam.Color = ColorSequence.new(Color3.new(1, 1, 1))
-    beam.Width0 = 0.15
-    beam.Width1 = 0.15
+    beam.Width0 = 0.2
+    beam.Width1 = 0.2
     beam.Parent = clickMarker
     
-    -- Remove after 3 seconds if not moving
     spawn(function()
         wait(3)
         if clickMarker then
@@ -484,21 +554,21 @@ local function createClickMarker(position)
     end)
 end
 
--- Create Cancel Move Button
+-- Create Cancel Move Button (bigger for grandma)
 local function createCancelButton()
     if cancelMoveButton then
         cancelMoveButton:Destroy()
     end
     
     cancelMoveButton = Instance.new("TextButton")
-    cancelMoveButton.Size = UDim2.new(0, 100, 0, 25)
-    cancelMoveButton.Position = UDim2.new(0.5, -50, 0.7, 0)
+    cancelMoveButton.Size = UDim2.new(0, 140, 0, 35)
+    cancelMoveButton.Position = UDim2.new(0.5, -70, 0.7, 0)
     cancelMoveButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
     cancelMoveButton.BorderSizePixel = 0
     cancelMoveButton.Text = "CANCEL MOVE"
     cancelMoveButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     cancelMoveButton.Font = Enum.Font.SourceSansBold
-    cancelMoveButton.TextSize = 10
+    cancelMoveButton.TextSize = 16
     cancelMoveButton.ZIndex = 5
     cancelMoveButton.Parent = screenGui
     
@@ -539,7 +609,7 @@ local function createESP(targetPlayer)
         
         local billboard = Instance.new("BillboardGui")
         billboard.Name = "ESP_Billboard"
-        billboard.Size = UDim2.new(0, 100, 0, 25)
+        billboard.Size = UDim2.new(0, 120, 0, 30)
         billboard.StudsOffset = Vector3.new(0, 2.5, 0)
         billboard.AlwaysOnTop = true
         billboard.Parent = character.Head
@@ -550,7 +620,7 @@ local function createESP(targetPlayer)
         nameLabel.Text = targetPlayer.Name
         nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
         nameLabel.Font = Enum.Font.SourceSansBold
-        nameLabel.TextSize = 12
+        nameLabel.TextSize = 14
         nameLabel.TextStrokeTransparency = 0
         nameLabel.Parent = billboard
         
@@ -560,8 +630,8 @@ local function createESP(targetPlayer)
         distanceLabel.BackgroundTransparency = 1
         distanceLabel.Text = ""
         distanceLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-        distanceLabel.Font = Enum.Font.SourceSans
-        distanceLabel.TextSize = 10
+        distanceLabel.Font = Enum.Font.SourceSansBold
+        distanceLabel.TextSize = 12
         distanceLabel.TextStrokeTransparency = 0
         distanceLabel.Parent = billboard
         
@@ -664,7 +734,6 @@ local function moveToPosition(targetPosition)
         pathConnection = nil
     end
     
-    -- Create visual marker
     createClickMarker(targetPosition)
     createCancelButton()
     
@@ -935,7 +1004,7 @@ local function flingAll()
 end
 
 -- Main Tab Content
-createToggle(mainPage, "Click To TP", function(enabled, oldConnection)
+createToggle(mainPage, "Click To TP", "Click anywhere to teleport there instantly!", function(enabled, oldConnection)
     if oldConnection then oldConnection:Disconnect() end
     if enabled then
         return mouse.Button1Down:Connect(function()
@@ -946,11 +1015,10 @@ createToggle(mainPage, "Click To TP", function(enabled, oldConnection)
     end
 end)
 
-createToggle(mainPage, "Click To Move", function(enabled, oldConnection)
+createToggle(mainPage, "Click To Move", "Click to walk to that spot with pathfinding!", function(enabled, oldConnection)
     clickToMoveEnabled = enabled
     if oldConnection then oldConnection:Disconnect() end
     
-    -- Clean up if disabled
     if not enabled then
         if pathConnection then
             pathConnection:Disconnect()
@@ -979,7 +1047,7 @@ createToggle(mainPage, "Click To Move", function(enabled, oldConnection)
     end
 end)
 
-createToggle(mainPage, "INF Jump", function(enabled, oldConnection)
+createToggle(mainPage, "INF Jump", "Jump forever without limits!", function(enabled, oldConnection)
     if oldConnection then oldConnection:Disconnect() end
     if enabled then
         return UserInputService.JumpRequest:Connect(function()
@@ -990,27 +1058,42 @@ createToggle(mainPage, "INF Jump", function(enabled, oldConnection)
     end
 end)
 
-createToggle(mainPage, "Auto Jump (Broken)", function(enabled, oldConnection)
+createToggle(mainPage, "Auto Jump", "Automatically jumps over obstacles!", function(enabled, oldConnection)
     autoJumpEnabled = enabled
 end)
 
-createToggle(mainPage, "Walk On Air", function(enabled, oldConnection)
+createToggle(mainPage, "Walk On Air", "Walk on a purple pad that follows you! No falling!", function(enabled, oldConnection)
+    walkOnAirEnabled = enabled
     if oldConnection then oldConnection:Disconnect() end
+    if walkOnAirPad then
+        removeWalkOnAirPad()
+    end
+    
     if enabled then
-        return RunService.Stepped:Connect(function()
-            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        createWalkOnAirPad()
+        walkOnAirConnection = RunService.RenderStepped:Connect(function()
+            if not walkOnAirEnabled then return end
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and walkOnAirPad then
                 local root = player.Character.HumanoidRootPart
+                local pos = root.Position
+                
+                -- Update pad position to be under the player
+                walkOnAirPad.Position = Vector3.new(pos.X, pos.Y - 3.5, pos.Z)
+                
+                -- Keep player from falling
                 local velocity = root.Velocity
-                root.Velocity = Vector3.new(velocity.X, math.max(velocity.Y, 0), velocity.Z)
                 if velocity.Y <= 0 then
                     root.Velocity = Vector3.new(velocity.X, 0, velocity.Z)
                 end
             end
         end)
+        return walkOnAirConnection
+    else
+        removeWalkOnAirPad()
     end
 end)
 
-createToggle(mainPage, "X-Ray", function(enabled, oldConnection)
+createToggle(mainPage, "X-Ray", "See through walls! Objects become see-through!", function(enabled, oldConnection)
     xrayEnabled = enabled
     if enabled then
         enableXRay()
@@ -1019,7 +1102,7 @@ createToggle(mainPage, "X-Ray", function(enabled, oldConnection)
     end
 end)
 
-createToggle(mainPage, "ESP (Names)", function(enabled, oldConnection)
+createToggle(mainPage, "ESP (Names)", "See other players' names and distance!", function(enabled, oldConnection)
     espEnabled = enabled
     if enabled then
         enableESP()
@@ -1028,13 +1111,13 @@ createToggle(mainPage, "ESP (Names)", function(enabled, oldConnection)
     end
 end)
 
-local speedSlider = createSlider(mainPage, "Speed", 16, 200, 16, function(value)
+local speedSlider = createSlider(mainPage, "Speed", 16, 200, 16, "Change how fast you walk!", function(value)
     if player.Character and player.Character:FindFirstChild("Humanoid") then
         player.Character.Humanoid.WalkSpeed = value
     end
 end)
 
-local jumpSlider = createSlider(mainPage, "Jump", 50, 300, 50, function(value)
+local jumpSlider = createSlider(mainPage, "Jump", 50, 300, 50, "Change how high you jump!", function(value)
     if player.Character and player.Character:FindFirstChild("Humanoid") then
         player.Character.Humanoid.JumpPower = value
     end
@@ -1048,38 +1131,38 @@ end)
 mainPage.CanvasSize = UDim2.new(0, 0, 0, mainPage.CanvasSize.Y.Offset + 10)
 
 -- Troll Tab Content
-tabButtons[2].Visible = true
-
 -- Player Selection Dropdown Container
 local playerSelectContainer = Instance.new("Frame")
-playerSelectContainer.Size = UDim2.new(1, -4, 0, 50)
+playerSelectContainer.Size = UDim2.new(1, -4, 0, 60)
 playerSelectContainer.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
 playerSelectContainer.BorderSizePixel = 0
 playerSelectContainer.ZIndex = 10
 playerSelectContainer.Parent = trollPage
 
 local playerSelectLabel = Instance.new("TextLabel")
-playerSelectLabel.Size = UDim2.new(1, 0, 0, 16)
+playerSelectLabel.Size = UDim2.new(1, 0, 0, 20)
 playerSelectLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 playerSelectLabel.BorderSizePixel = 0
 playerSelectLabel.Text = "Select Player"
 playerSelectLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 playerSelectLabel.Font = Enum.Font.SourceSansBold
-playerSelectLabel.TextSize = 10
+playerSelectLabel.TextSize = 14
 playerSelectLabel.ZIndex = 11
 playerSelectLabel.Parent = playerSelectContainer
 
 local playerDropdown = Instance.new("TextButton")
-playerDropdown.Size = UDim2.new(0.8, 0, 0, 20)
-playerDropdown.Position = UDim2.new(0.1, 0, 0, 18)
+playerDropdown.Size = UDim2.new(0.8, 0, 0, 26)
+playerDropdown.Position = UDim2.new(0.1, 0, 0, 24)
 playerDropdown.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 playerDropdown.BorderSizePixel = 0
 playerDropdown.Text = "Select Player"
 playerDropdown.TextColor3 = Color3.fromRGB(255, 255, 255)
-playerDropdown.Font = Enum.Font.SourceSans
-playerDropdown.TextSize = 9
+playerDropdown.Font = Enum.Font.SourceSansBold
+playerDropdown.TextSize = 14
 playerDropdown.ZIndex = 11
 playerDropdown.Parent = playerSelectContainer
+
+trollPage.CanvasSize = UDim2.new(0, 0, 0, trollPage.CanvasSize.Y.Offset + 62)
 
 -- Dropdown List as separate ScreenGui
 local dropdownGui = Instance.new("ScreenGui")
@@ -1090,8 +1173,8 @@ dropdownGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 dropdownGui.IgnoreGuiInset = true
 
 local dropdownList = Instance.new("Frame")
-dropdownList.Size = UDim2.new(0, 176, 0, 0)
-dropdownList.Position = UDim2.new(1, -225 + 22, 0.5, -math.min(screenSize.Y - 60, 380)/2 + 42 + 18 + 20)
+dropdownList.Size = UDim2.new(0, 240, 0, 0)
+dropdownList.Position = UDim2.new(1, -310 + 30, 0.5, -math.min(screenSize.Y - 80, 450)/2 + 58 + 24 + 26)
 dropdownList.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
 dropdownList.BorderSizePixel = 0
 dropdownList.ClipsDescendants = true
@@ -1112,13 +1195,13 @@ local function refreshPlayerDropdown()
         if plr ~= player then
             playerCount = playerCount + 1
             local playerButton = Instance.new("TextButton")
-            playerButton.Size = UDim2.new(1, 0, 0, 16)
+            playerButton.Size = UDim2.new(1, 0, 0, 22)
             playerButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
             playerButton.BorderSizePixel = 0
             playerButton.Text = plr.Name
             playerButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-            playerButton.Font = Enum.Font.SourceSans
-            playerButton.TextSize = 9
+            playerButton.Font = Enum.Font.SourceSansBold
+            playerButton.TextSize = 14
             playerButton.ZIndex = 101
             playerButton.Parent = dropdownList
             
@@ -1131,7 +1214,7 @@ local function refreshPlayerDropdown()
         end
     end
     
-    dropdownList.Size = UDim2.new(0, 176, 0, playerCount * 16)
+    dropdownList.Size = UDim2.new(0, 240, 0, playerCount * 22)
 end
 
 local dropdownOpen = false
@@ -1147,7 +1230,7 @@ playerDropdown.MouseButton1Click:Connect(function()
 end)
 
 -- Tap To Fling Toggle
-createToggle(trollPage, "Tap Player To Fling", function(enabled, oldConnection)
+createToggle(trollPage, "Tap Player To Fling", "Tap on a player to fling them!", function(enabled, oldConnection)
     if oldConnection then oldConnection:Disconnect() end
     tapToFlingEnabled = enabled
     if enabled then
@@ -1168,29 +1251,47 @@ createToggle(trollPage, "Tap Player To Fling", function(enabled, oldConnection)
     end
 end)
 
--- Action Buttons
-local function createTrollButton(text, color, callback)
+-- Action Buttons (bigger for grandma)
+local function createTrollButton(text, color, description, callback)
     local button = Instance.new("TextButton")
-    button.Size = UDim2.new(0.9, 0, 0, 20)
+    button.Size = UDim2.new(0.9, 0, 0, 32)
     button.BackgroundColor3 = color
     button.BorderSizePixel = 0
     button.Text = text
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
     button.Font = Enum.Font.SourceSansBold
-    button.TextSize = 9
+    button.TextSize = 15
     button.ZIndex = 11
     button.Parent = trollPage
+    
+    -- Info button for troll actions
+    local infoButton = Instance.new("TextButton")
+    infoButton.Size = UDim2.new(0, 22, 0, 22)
+    infoButton.Position = UDim2.new(0, 4, 0.5, -11)
+    infoButton.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
+    infoButton.BorderSizePixel = 0
+    infoButton.Text = "?"
+    infoButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    infoButton.Font = Enum.Font.SourceSansBold
+    infoButton.TextSize = 16
+    infoButton.ZIndex = 12
+    infoButton.Parent = button
+    
+    infoButton.MouseButton1Click:Connect(function()
+        playSound("87437544236708")
+        showInfo(description)
+    end)
     
     button.MouseButton1Click:Connect(function()
         playSound("87437544236708")
         callback()
     end)
     
-    trollPage.CanvasSize = UDim2.new(0, 0, 0, trollPage.CanvasSize.Y.Offset + 22)
+    trollPage.CanvasSize = UDim2.new(0, 0, 0, trollPage.CanvasSize.Y.Offset + 34)
     return button
 end
 
-createTrollButton("FLING SELECTED", Color3.fromRGB(200, 50, 50), function()
+createTrollButton("FLING SELECTED", Color3.fromRGB(200, 50, 50), "Fling the player you selected above!", function()
     local targetName = playerDropdown.Text
     if targetName ~= "Select Player" then
         local target = Players:FindFirstChild(targetName)
@@ -1198,11 +1299,11 @@ createTrollButton("FLING SELECTED", Color3.fromRGB(200, 50, 50), function()
     end
 end)
 
-createTrollButton("FLING ALL", Color3.fromRGB(255, 0, 0), function()
+createTrollButton("FLING ALL", Color3.fromRGB(255, 0, 0), "Fling EVERYONE in the server!", function()
     flingAll()
 end)
 
-createTrollButton("SPECTATE PLAYER", Color3.fromRGB(50, 100, 200), function()
+createTrollButton("SPECTATE PLAYER", Color3.fromRGB(50, 100, 200), "Watch through the eyes of another player!", function()
     local targetName = playerDropdown.Text
     if targetName ~= "Select Player" then
         local target = Players:FindFirstChild(targetName)
@@ -1216,7 +1317,7 @@ createTrollButton("SPECTATE PLAYER", Color3.fromRGB(50, 100, 200), function()
     end
 end)
 
-createTrollButton("TP TO PLAYER", Color3.fromRGB(50, 200, 100), function()
+createTrollButton("TP TO PLAYER", Color3.fromRGB(50, 200, 100), "Teleport right next to a player!", function()
     local targetName = playerDropdown.Text
     if targetName ~= "Select Player" then
         local target = Players:FindFirstChild(targetName)
@@ -1226,7 +1327,7 @@ createTrollButton("TP TO PLAYER", Color3.fromRGB(50, 200, 100), function()
     end
 end)
 
-createTrollButton("TOUCH BACK FLING", Color3.fromRGB(200, 100, 50), function()
+createTrollButton("TOUCH BACK FLING", Color3.fromRGB(200, 100, 50), "Fling players when they touch you!", function()
     local success, err = pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/miso517/scirpt/refs/heads/main/main.lua"))()
     end)
@@ -1235,13 +1336,86 @@ end)
 
 trollPage.CanvasSize = UDim2.new(0, 0, 0, trollPage.CanvasSize.Y.Offset + 10)
 
+-- Settings Tab Content
+local colorLabel = Instance.new("TextLabel")
+colorLabel.Size = UDim2.new(1, -4, 0, 26)
+colorLabel.Position = UDim2.new(0, 2, 0, 2)
+colorLabel.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+colorLabel.BorderSizePixel = 0
+colorLabel.Text = "UI Color Presets"
+colorLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+colorLabel.Font = Enum.Font.SourceSansBold
+colorLabel.TextSize = 16
+colorLabel.ZIndex = 11
+colorLabel.Parent = settingsPage
+
+settingsPage.CanvasSize = UDim2.new(0, 0, 0, settingsPage.CanvasSize.Y.Offset + 28)
+
+local colors = {
+    {name = "Gray", color = Color3.fromRGB(40, 40, 40)},
+    {name = "Blue", color = Color3.fromRGB(30, 30, 80)},
+    {name = "Red", color = Color3.fromRGB(80, 30, 30)},
+    {name = "Green", color = Color3.fromRGB(30, 80, 30)},
+    {name = "Purple", color = Color3.fromRGB(60, 30, 80)},
+    {name = "Black", color = Color3.fromRGB(20, 20, 20)}
+}
+
+for i, colorData in ipairs(colors) do
+    local colorButton = Instance.new("TextButton")
+    colorButton.Size = UDim2.new(0.9, 0, 0, 30)
+    colorButton.Position = UDim2.new(0.05, 0, 0, 2 + (i * 32))
+    colorButton.BackgroundColor3 = colorData.color
+    colorButton.BorderSizePixel = 0
+    colorButton.Text = colorData.name
+    colorButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    colorButton.Font = Enum.Font.SourceSansBold
+    colorButton.TextSize = 16
+    colorButton.ZIndex = 11
+    colorButton.Parent = settingsPage
+
+    colorButton.MouseButton1Click:Connect(function()
+        playSound("87437544236708")
+        local mainColor = colorData.color
+        local contentColor = Color3.fromRGB(
+            math.clamp(math.floor(mainColor.R * 255 + 5), 0, 255) / 255,
+            math.clamp(math.floor(mainColor.G * 255 + 5), 0, 255) / 255,
+            math.clamp(math.floor(mainColor.B * 255 + 5), 0, 255) / 255
+        )
+        
+        mainFrame.BackgroundColor3 = mainColor
+        contentFrame.BackgroundColor3 = contentColor
+        settingsPage.BackgroundColor3 = contentColor
+        
+        tabFrame.BackgroundColor3 = Color3.fromRGB(
+            math.clamp(math.floor(mainColor.R * 255 - 5), 0, 255) / 255,
+            math.clamp(math.floor(mainColor.G * 255 - 5), 0, 255) / 255,
+            math.clamp(math.floor(mainColor.B * 255 - 5), 0, 255) / 255
+        )
+        
+        titleLabel.BackgroundColor3 = Color3.fromRGB(
+            math.clamp(math.floor(mainColor.R * 255 - 10), 0, 255) / 255,
+            math.clamp(math.floor(mainColor.G * 255 - 10), 0, 255) / 255,
+            math.clamp(math.floor(mainColor.B * 255 - 10), 0, 255) / 255
+        )
+    end)
+    
+    settingsPage.CanvasSize = UDim2.new(0, 0, 0, settingsPage.CanvasSize.Y.Offset + 32)
+end
+
+-- Cleanup on character reset
+player.CharacterAdded:Connect(function()
+    if walkOnAirPad and not walkOnAirEnabled then
+        removeWalkOnAirPad()
+    end
+end)
+
 -- Opening Animation
 mainFrame.Size = UDim2.new(0, 0, 0, 0)
-mainFrame.Position = UDim2.new(1, -110, 0.5, -math.min(screenSize.Y - 60, 380)/2)
+mainFrame.Position = UDim2.new(1, -150, 0.5, -math.min(screenSize.Y - 80, 450)/2)
 
 playSound("138158731526545")
 local openTween = TweenService:Create(mainFrame, TweenInfo.new(1.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-    Size = UDim2.new(0, 220, 0, math.min(screenSize.Y - 60, 380)),
-    Position = UDim2.new(1, -225, 0.5, -math.min(screenSize.Y - 60, 380)/2)
+    Size = UDim2.new(0, 300, 0, math.min(screenSize.Y - 80, 450)),
+    Position = UDim2.new(1, -310, 0.5, -math.min(screenSize.Y - 80, 450)/2)
 })
 openTween:Play()
