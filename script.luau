@@ -1,5 +1,6 @@
 -- Super Secret Grandma Hacks (SSGH)
 -- Mobile Hacks GUI - Grandma Edition
+-- FULLY UPDATED - Noclip + Anti-Fling Added!
 
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
@@ -25,8 +26,8 @@ screenGui.IgnoreGuiInset = true
 -- Main Frame (bigger for grandma)
 local mainFrame = Instance.new("Frame")
 mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 300, 0, math.min(screenSize.Y - 80, 450))
-mainFrame.Position = UDim2.new(1, -310, 0.5, -math.min(screenSize.Y - 80, 450)/2)
+mainFrame.Size = UDim2.new(0, 300, 0, math.min(screenSize.Y - 80, 500))
+mainFrame.Position = UDim2.new(1, -310, 0.5, -math.min(screenSize.Y - 80, 500)/2)
 mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 mainFrame.BorderSizePixel = 0
 mainFrame.ZIndex = 10
@@ -43,6 +44,7 @@ titleLabel.Text = "Super Secret Grandma Hacks"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.Font = Enum.Font.SourceSansBold
 titleLabel.TextSize = 16
+titleLabel.RichText = true
 titleLabel.ZIndex = 11
 titleLabel.Parent = mainFrame
 
@@ -82,11 +84,6 @@ contentFrame.Parent = mainFrame
 
 -- Glitchy Rainbow Title Animation
 local function rainbowGlitchEffect()
-    local hue = tick() * 0.5 % 1
-    local color = Color3.fromHSV(hue, 1, 1)
-    titleLabel.TextColor3 = color
-    
-    -- Glitchy scrambled effect on individual characters
     local chars = {"S","u","p","e","r"," ","S","e","c","r","e","t"," ","G","r","a","n","d","m","a"," ","H","a","c","k","s"}
     local text = ""
     for i, char in ipairs(chars) do
@@ -94,7 +91,6 @@ local function rainbowGlitchEffect()
         local charColor = Color3.fromHSV(charHue, 1, 1)
         text = text .. "<font color=\"rgb(" .. math.floor(charColor.R * 255) .. "," .. math.floor(charColor.G * 255) .. "," .. math.floor(charColor.B * 255) .. ")\">" .. char .. "</font>"
     end
-    titleLabel.RichText = true
     titleLabel.Text = text
 end
 
@@ -133,7 +129,7 @@ toggleButton.MouseButton1Click:Connect(function()
         end
         titleLabel.Visible = true
     else
-        mainFrame:TweenSize(UDim2.new(0, 300, 0, math.min(screenSize.Y - 80, 450)), "Out", "Quad", 0.3, true)
+        mainFrame:TweenSize(UDim2.new(0, 300, 0, math.min(screenSize.Y - 80, 500)), "Out", "Quad", 0.3, true)
         toggleButton.Text = "-"
         for _, v in pairs(mainFrame:GetChildren()) do
             v.Visible = true
@@ -219,15 +215,15 @@ local function showInfo(text)
     infoGui.IgnoreGuiInset = true
     
     local infoFrame = Instance.new("Frame")
-    infoFrame.Size = UDim2.new(0, 250, 0, 100)
-    infoFrame.Position = UDim2.new(0.5, -125, 0.5, -50)
+    infoFrame.Size = UDim2.new(0, 260, 0, 120)
+    infoFrame.Position = UDim2.new(0.5, -130, 0.5, -60)
     infoFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     infoFrame.BorderSizePixel = 0
     infoFrame.ZIndex = 200
     infoFrame.Parent = infoGui
     
     local infoLabel = Instance.new("TextLabel")
-    infoLabel.Size = UDim2.new(1, -20, 0.7, 0)
+    infoLabel.Size = UDim2.new(1, -20, 0.65, 0)
     infoLabel.Position = UDim2.new(0, 10, 0, 5)
     infoLabel.BackgroundTransparency = 1
     infoLabel.Text = text
@@ -239,8 +235,8 @@ local function showInfo(text)
     infoLabel.Parent = infoFrame
     
     local closeButton = Instance.new("TextButton")
-    closeButton.Size = UDim2.new(0, 80, 0, 30)
-    closeButton.Position = UDim2.new(0.5, -40, 0.7, 5)
+    closeButton.Size = UDim2.new(0, 100, 0, 35)
+    closeButton.Position = UDim2.new(0.5, -50, 0.7, 5)
     closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
     closeButton.BorderSizePixel = 0
     closeButton.Text = "OK GOT IT!"
@@ -255,11 +251,91 @@ local function showInfo(text)
         infoGui:Destroy()
     end)
     
-    -- Auto close after 8 seconds
     spawn(function()
-        wait(8)
+        wait(10)
         if infoGui and infoGui.Parent then
             infoGui:Destroy()
+        end
+    end)
+end
+
+-- Create Warning Popup Function (for Anti-Fling)
+local function showWarning(title, message, callback)
+    local warningGui = Instance.new("ScreenGui")
+    warningGui.Name = "WarningGui"
+    warningGui.Parent = player:WaitForChild("PlayerGui")
+    warningGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    warningGui.IgnoreGuiInset = true
+    
+    local warningFrame = Instance.new("Frame")
+    warningFrame.Size = UDim2.new(0, 280, 0, 160)
+    warningFrame.Position = UDim2.new(0.5, -140, 0.5, -80)
+    warningFrame.BackgroundColor3 = Color3.fromRGB(40, 20, 20)
+    warningFrame.BorderColor3 = Color3.fromRGB(255, 0, 0)
+    warningFrame.BorderSizePixel = 3
+    warningFrame.ZIndex = 300
+    warningFrame.Parent = warningGui
+    
+    local warningTitle = Instance.new("TextLabel")
+    warningTitle.Size = UDim2.new(1, 0, 0, 30)
+    warningTitle.Position = UDim2.new(0, 0, 0, 5)
+    warningTitle.BackgroundTransparency = 1
+    warningTitle.Text = "⚠️ " .. title .. " ⚠️"
+    warningTitle.TextColor3 = Color3.fromRGB(255, 50, 50)
+    warningTitle.Font = Enum.Font.SourceSansBold
+    warningTitle.TextSize = 18
+    warningTitle.ZIndex = 301
+    warningTitle.Parent = warningFrame
+    
+    local warningLabel = Instance.new("TextLabel")
+    warningLabel.Size = UDim2.new(1, -20, 0, 60)
+    warningLabel.Position = UDim2.new(0, 10, 0, 40)
+    warningLabel.BackgroundTransparency = 1
+    warningLabel.Text = message
+    warningLabel.TextColor3 = Color3.fromRGB(255, 200, 200)
+    warningLabel.Font = Enum.Font.SourceSansBold
+    warningLabel.TextSize = 14
+    warningLabel.TextWrapped = true
+    warningLabel.ZIndex = 301
+    warningLabel.Parent = warningFrame
+    
+    local yesButton = Instance.new("TextButton")
+    yesButton.Size = UDim2.new(0, 100, 0, 35)
+    yesButton.Position = UDim2.new(0.25, -50, 0.7, 10)
+    yesButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+    yesButton.BorderSizePixel = 0
+    yesButton.Text = "YES"
+    yesButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    yesButton.Font = Enum.Font.SourceSansBold
+    yesButton.TextSize = 18
+    yesButton.ZIndex = 301
+    yesButton.Parent = warningFrame
+    
+    local noButton = Instance.new("TextButton")
+    noButton.Size = UDim2.new(0, 100, 0, 35)
+    noButton.Position = UDim2.new(0.75, -50, 0.7, 10)
+    noButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    noButton.BorderSizePixel = 0
+    noButton.Text = "NO"
+    noButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    noButton.Font = Enum.Font.SourceSansBold
+    noButton.TextSize = 18
+    noButton.ZIndex = 301
+    noButton.Parent = warningFrame
+    
+    yesButton.MouseButton1Click:Connect(function()
+        playSound("87437544236708")
+        warningGui:Destroy()
+        if callback then
+            callback(true)
+        end
+    end)
+    
+    noButton.MouseButton1Click:Connect(function()
+        playSound("87437544236708")
+        warningGui:Destroy()
+        if callback then
+            callback(false)
         end
     end)
 end
@@ -273,7 +349,6 @@ local function createToggle(page, text, description, callback)
     toggleFrame.ZIndex = 10
     toggleFrame.Parent = page
 
-    -- Info Button (?) 
     local infoButton = Instance.new("TextButton")
     infoButton.Size = UDim2.new(0, 22, 0, 22)
     infoButton.Position = UDim2.new(0, 4, 0.5, -11)
@@ -291,7 +366,6 @@ local function createToggle(page, text, description, callback)
         showInfo(description)
     end)
 
-    -- Arrow pointing from text to button
     local arrow = Instance.new("TextLabel")
     arrow.Size = UDim2.new(0, 20, 1, 0)
     arrow.Position = UDim2.new(0, 28, 0, 0)
@@ -337,7 +411,7 @@ local function createToggle(page, text, description, callback)
         toggle.Text = enabled and "ON" or "OFF"
         toggle.BackgroundColor3 = enabled and Color3.fromRGB(0, 170, 0) or Color3.fromRGB(80, 80, 80)
         if callback then
-            connection = callback(enabled, connection)
+            connection = callback(enabled, connection, toggle)
         end
     end)
 
@@ -354,7 +428,6 @@ local function createSlider(page, text, min, max, default, description, callback
     sliderFrame.ZIndex = 10
     sliderFrame.Parent = page
 
-    -- Info Button
     local infoButton = Instance.new("TextButton")
     infoButton.Size = UDim2.new(0, 22, 0, 22)
     infoButton.Position = UDim2.new(0, 4, 0.2, -5)
@@ -444,15 +517,21 @@ local function createSlider(page, text, min, max, default, description, callback
     return {minusButton, plusButton, setButton, label}
 end
 
--- Variables for features
+-- ============================================
+-- FEATURE VARIABLES
+-- ============================================
 local tapToFlingEnabled = false
 local clickToMoveEnabled = false
 local autoJumpEnabled = false
 local espEnabled = false
 local xrayEnabled = false
 local walkOnAirEnabled = false
+local noclipEnabled = false
+local antiFlingEnabled = false
 local walkOnAirPad = nil
 local walkOnAirConnection = nil
+local noclipConnection = nil
+local antiFlingConnection = nil
 local spectating = false
 local spectateTarget = nil
 local espConnections = {}
@@ -460,8 +539,11 @@ local xrayConnections = {}
 local pathConnection = nil
 local clickMarker = nil
 local cancelMoveButton = nil
+local originalFlingValues = {}
 
--- Create Purple Pad for Walk on Air
+-- ============================================
+-- WALK ON AIR FUNCTIONS (INVISIBLE PAD - WORKS EVERYWHERE!)
+-- ============================================
 local function createWalkOnAirPad()
     if walkOnAirPad then
         walkOnAirPad:Destroy()
@@ -469,48 +551,180 @@ local function createWalkOnAirPad()
     end
     
     walkOnAirPad = Instance.new("Part")
-    walkOnAirPad.Size = Vector3.new(6, 0.3, 6)
+    walkOnAirPad.Name = "WalkOnAirPad"
+    walkOnAirPad.Size = Vector3.new(10, 0.3, 10)
     walkOnAirPad.Anchored = true
     walkOnAirPad.CanCollide = true
-    walkOnAirPad.BrickColor = BrickColor.new("Royal purple")
-    walkOnAirPad.Material = Enum.Material.Neon
-    walkOnAirPad.Transparency = 0.3
+    walkOnAirPad.Transparency = 1
+    walkOnAirPad.CastShadow = false
+    walkOnAirPad.Material = Enum.Material.SmoothPlastic
+    walkOnAirPad.BrickColor = BrickColor.new("White")
     walkOnAirPad.Parent = workspace
-    
-    -- Add glow effect
-    local attachment0 = Instance.new("Attachment")
-    attachment0.Position = Vector3.new(0, -0.15, 0)
-    attachment0.Parent = walkOnAirPad
-    
-    local attachment1 = Instance.new("Attachment")
-    attachment1.Position = Vector3.new(0, 0.15, 0)
-    attachment1.Parent = walkOnAirPad
-    
-    local beam = Instance.new("Beam")
-    beam.Attachment0 = attachment0
-    beam.Attachment1 = attachment1
-    beam.Color = ColorSequence.new(Color3.fromRGB(170, 0, 255))
-    beam.Width0 = 6
-    beam.Width1 = 6
-    beam.Parent = walkOnAirPad
-    
-    -- Particle effect
-    local particleEmitter = Instance.new("ParticleEmitter")
-    particleEmitter.Texture = "rbxassetid://132695252585030"
-    particleEmitter.Rate = 20
-    particleEmitter.Lifetime = NumberRange.new(0.5, 1)
-    particleEmitter.Speed = NumberRange.new(1, 3)
-    particleEmitter.SpreadAngle = Vector2.new(180, 180)
-    particleEmitter.Color = ColorSequence.new(Color3.fromRGB(170, 0, 255))
-    particleEmitter.Size = NumberSequence.new(0.2)
-    particleEmitter.Transparency = NumberSequence.new(0.5)
-    particleEmitter.Parent = walkOnAirPad
 end
 
 local function removeWalkOnAirPad()
     if walkOnAirPad then
         walkOnAirPad:Destroy()
         walkOnAirPad = nil
+    end
+end
+
+local function enableWalkOnAir()
+    createWalkOnAirPad()
+    
+    walkOnAirConnection = RunService.RenderStepped:Connect(function()
+        if not walkOnAirEnabled then return end
+        if not player.Character then return end
+        
+        local root = player.Character:FindFirstChild("HumanoidRootPart")
+        if not root then return end
+        
+        if walkOnAirPad then
+            walkOnAirPad.Position = Vector3.new(
+                root.Position.X,
+                root.Position.Y - 3.5,
+                root.Position.Z
+            )
+        end
+        
+        local velocity = root.Velocity
+        if velocity.Y < 0 then
+            root.Velocity = Vector3.new(velocity.X, 0, velocity.Z)
+        end
+    end)
+end
+
+local function disableWalkOnAir()
+    if walkOnAirConnection then
+        walkOnAirConnection:Disconnect()
+        walkOnAirConnection = nil
+    end
+    removeWalkOnAirPad()
+end
+
+-- ============================================
+-- NOCLIP FUNCTION
+-- ============================================
+local function enableNoclip()
+    noclipConnection = RunService.Stepped:Connect(function()
+        if not noclipEnabled then return end
+        if not player.Character then return end
+        
+        for _, part in pairs(player.Character:GetDescendants()) do
+            if part:IsA("BasePart") and part.CanCollide == true then
+                part.CanCollide = false
+            end
+        end
+    end)
+end
+
+local function disableNoclip()
+    if noclipConnection then
+        noclipConnection:Disconnect()
+        noclipConnection = nil
+    end
+    -- Restore collision
+    if player.Character then
+        for _, part in pairs(player.Character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = true
+            end
+        end
+    end
+end
+
+-- ============================================
+-- ANTI-FLING FUNCTION (PROTECT GRANDMA!)
+-- ============================================
+local function enableAntiFling()
+    -- Method 1: Network ownership protection
+    antiFlingConnection = RunService.RenderStepped:Connect(function()
+        if not antiFlingEnabled then return end
+        if not player.Character then return end
+        
+        local root = player.Character:FindFirstChild("HumanoidRootPart")
+        if not root then return end
+        
+        -- Set network ownership to nil (server takes control)
+        pcall(function()
+            root:SetNetworkOwner(nil)
+        end)
+        
+        -- Check for abnormal velocity (being flung)
+        local velocity = root.Velocity
+        local speed = velocity.Magnitude
+        
+        -- If being flung at insane speed, stop it
+        if speed > 500 then
+            root.Velocity = Vector3.new(0, 0, 0)
+            root.RotVelocity = Vector3.new(0, 0, 0)
+        end
+        
+        -- Check all parts for network ownership
+        for _, part in pairs(player.Character:GetChildren()) do
+            if part:IsA("BasePart") then
+                pcall(function()
+                    -- Try to take network ownership back
+                    part:SetNetworkOwner(player)
+                end)
+            end
+        end
+    end)
+    
+    -- Method 2: Character added protection
+    local charAdded
+    charAdded = player.CharacterAdded:Connect(function(character)
+        if not antiFlingEnabled then
+            charAdded:Disconnect()
+            return
+        end
+        
+        -- Protect new character
+        task.wait(0.1)
+        local root = character:FindFirstChild("HumanoidRootPart")
+        if root then
+            pcall(function()
+                root:SetNetworkOwner(player)
+            end)
+            
+            -- Lock root part to prevent manipulation
+            local oldVelocity = root.Velocity
+            root:GetPropertyChangedSignal("Velocity"):Connect(function()
+                if not antiFlingEnabled then return end
+                local newVelocity = root.Velocity
+                if newVelocity.Magnitude > 300 then
+                    root.Velocity = Vector3.new(0, 0, 0)
+                end
+            end)
+        end
+    end)
+    
+    -- Store character added connection for cleanup
+    antiFlingConnection = {
+        RenderStep = antiFlingConnection,
+        CharAdded = charAdded
+    }
+end
+
+local function disableAntiFling()
+    if antiFlingConnection then
+        if antiFlingConnection.RenderStep then
+            antiFlingConnection.RenderStep:Disconnect()
+        end
+        if antiFlingConnection.CharAdded then
+            antiFlingConnection.CharAdded:Disconnect()
+        end
+        antiFlingConnection = nil
+    end
+    
+    -- Reset network ownership
+    if player.Character then
+        local root = player.Character:FindFirstChild("HumanoidRootPart")
+        if root then
+            pcall(function()
+                root:SetNetworkOwner(player)
+            end)
+        end
     end
 end
 
@@ -554,7 +768,7 @@ local function createClickMarker(position)
     end)
 end
 
--- Create Cancel Move Button (bigger for grandma)
+-- Create Cancel Move Button
 local function createCancelButton()
     if cancelMoveButton then
         cancelMoveButton:Destroy()
@@ -832,6 +1046,8 @@ end
 
 -- Fling Function
 local function SkidFling(TargetPlayer)
+    if antiFlingEnabled then return end -- Don't fling if anti-fling is on
+    
     local Character = player.Character
     local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
     local RootPart = Humanoid and Humanoid.RootPart
@@ -994,6 +1210,11 @@ end
 
 -- Fling All Function
 local function flingAll()
+    if antiFlingEnabled then
+        showInfo("⚠️ Cannot fling! Anti-Fling is ENABLED!")
+        return
+    end
+    
     for _, plr in pairs(Players:GetPlayers()) do
         if plr ~= player then
             spawn(function()
@@ -1003,7 +1224,9 @@ local function flingAll()
     end
 end
 
--- Main Tab Content
+-- ============================================
+-- MAIN TAB CONTENT
+-- ============================================
 createToggle(mainPage, "Click To TP", "Click anywhere to teleport there instantly!", function(enabled, oldConnection)
     if oldConnection then oldConnection:Disconnect() end
     if enabled then
@@ -1062,34 +1285,27 @@ createToggle(mainPage, "Auto Jump", "Automatically jumps over obstacles!", funct
     autoJumpEnabled = enabled
 end)
 
-createToggle(mainPage, "Walk On Air", "Walk on a purple pad that follows you! No falling!", function(enabled, oldConnection)
-    walkOnAirEnabled = enabled
+createToggle(mainPage, "Walk On Air", "Walk on invisible air! Never fall down!", function(enabled, oldConnection)
     if oldConnection then oldConnection:Disconnect() end
-    if walkOnAirPad then
-        removeWalkOnAirPad()
-    end
+    
+    walkOnAirEnabled = enabled
     
     if enabled then
-        createWalkOnAirPad()
-        walkOnAirConnection = RunService.RenderStepped:Connect(function()
-            if not walkOnAirEnabled then return end
-            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and walkOnAirPad then
-                local root = player.Character.HumanoidRootPart
-                local pos = root.Position
-                
-                -- Update pad position to be under the player
-                walkOnAirPad.Position = Vector3.new(pos.X, pos.Y - 3.5, pos.Z)
-                
-                -- Keep player from falling
-                local velocity = root.Velocity
-                if velocity.Y <= 0 then
-                    root.Velocity = Vector3.new(velocity.X, 0, velocity.Z)
-                end
-            end
-        end)
+        enableWalkOnAir()
         return walkOnAirConnection
     else
-        removeWalkOnAirPad()
+        disableWalkOnAir()
+    end
+end)
+
+createToggle(mainPage, "Noclip", "Walk through walls! Go anywhere!", function(enabled, oldConnection)
+    noclipEnabled = enabled
+    
+    if enabled then
+        enableNoclip()
+        return noclipConnection
+    else
+        disableNoclip()
     end
 end)
 
@@ -1111,6 +1327,40 @@ createToggle(mainPage, "ESP (Names)", "See other players' names and distance!", 
     end
 end)
 
+-- Anti-Fling with WARNING
+createToggle(mainPage, "Anti-Fling", "Protect grandma from being flung!", function(enabled, oldConnection, toggle)
+    if enabled then
+        -- Show warning popup
+        showWarning("WARNING!", "You will NOT be able to fling other players while Anti-Fling is ENABLED!\n\nDo you want to continue?", function(confirmed)
+            if confirmed then
+                -- User said YES
+                antiFlingEnabled = true
+                enableAntiFling()
+                toggle.Text = "ON"
+                toggle.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+                
+                -- Disable fling features
+                if tapToFlingEnabled then
+                    tapToFlingEnabled = false
+                    showInfo("Tap To Fling has been disabled because Anti-Fling is ON!")
+                end
+            else
+                -- User said NO
+                antiFlingEnabled = false
+                toggle.Text = "OFF"
+                toggle.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+            end
+        end)
+    else
+        -- Turn off anti-fling
+        antiFlingEnabled = false
+        disableAntiFling()
+        showInfo("Anti-Fling DISABLED! You can fling players again!")
+    end
+    
+    return nil -- No connection to return
+end)
+
 local speedSlider = createSlider(mainPage, "Speed", 16, 200, 16, "Change how fast you walk!", function(value)
     if player.Character and player.Character:FindFirstChild("Humanoid") then
         player.Character.Humanoid.WalkSpeed = value
@@ -1130,8 +1380,9 @@ end)
 
 mainPage.CanvasSize = UDim2.new(0, 0, 0, mainPage.CanvasSize.Y.Offset + 10)
 
--- Troll Tab Content
--- Player Selection Dropdown Container
+-- ============================================
+-- TROLL TAB CONTENT
+-- ============================================
 local playerSelectContainer = Instance.new("Frame")
 playerSelectContainer.Size = UDim2.new(1, -4, 0, 60)
 playerSelectContainer.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
@@ -1164,7 +1415,7 @@ playerDropdown.Parent = playerSelectContainer
 
 trollPage.CanvasSize = UDim2.new(0, 0, 0, trollPage.CanvasSize.Y.Offset + 62)
 
--- Dropdown List as separate ScreenGui
+-- Dropdown List
 local dropdownGui = Instance.new("ScreenGui")
 dropdownGui.Name = "DropdownGui"
 dropdownGui.Parent = player:WaitForChild("PlayerGui")
@@ -1174,7 +1425,7 @@ dropdownGui.IgnoreGuiInset = true
 
 local dropdownList = Instance.new("Frame")
 dropdownList.Size = UDim2.new(0, 240, 0, 0)
-dropdownList.Position = UDim2.new(1, -310 + 30, 0.5, -math.min(screenSize.Y - 80, 450)/2 + 58 + 24 + 26)
+dropdownList.Position = UDim2.new(1, -310 + 30, 0.5, -math.min(screenSize.Y - 80, 500)/2 + 58 + 24 + 26)
 dropdownList.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
 dropdownList.BorderSizePixel = 0
 dropdownList.ClipsDescendants = true
@@ -1232,10 +1483,18 @@ end)
 -- Tap To Fling Toggle
 createToggle(trollPage, "Tap Player To Fling", "Tap on a player to fling them!", function(enabled, oldConnection)
     if oldConnection then oldConnection:Disconnect() end
+    
+    if enabled and antiFlingEnabled then
+        showInfo("⚠️ Cannot enable! Anti-Fling is currently ON!")
+        return nil
+    end
+    
     tapToFlingEnabled = enabled
     if enabled then
         return mouse.Button1Down:Connect(function()
             if not tapToFlingEnabled then return end
+            if antiFlingEnabled then return end
+            
             local target = mouse.Target
             if target then
                 local targetPlayer = Players:GetPlayerFromCharacter(target.Parent)
@@ -1251,7 +1510,7 @@ createToggle(trollPage, "Tap Player To Fling", "Tap on a player to fling them!",
     end
 end)
 
--- Action Buttons (bigger for grandma)
+-- Action Buttons
 local function createTrollButton(text, color, description, callback)
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(0.9, 0, 0, 32)
@@ -1264,7 +1523,6 @@ local function createTrollButton(text, color, description, callback)
     button.ZIndex = 11
     button.Parent = trollPage
     
-    -- Info button for troll actions
     local infoButton = Instance.new("TextButton")
     infoButton.Size = UDim2.new(0, 22, 0, 22)
     infoButton.Position = UDim2.new(0, 4, 0.5, -11)
@@ -1284,6 +1542,13 @@ local function createTrollButton(text, color, description, callback)
     
     button.MouseButton1Click:Connect(function()
         playSound("87437544236708")
+        
+        -- Check anti-fling for fling buttons
+        if antiFlingEnabled and (text == "FLING SELECTED" or text == "FLING ALL") then
+            showInfo("⚠️ Cannot fling! Anti-Fling is ENABLED!")
+            return
+        end
+        
         callback()
     end)
     
@@ -1328,6 +1593,10 @@ createTrollButton("TP TO PLAYER", Color3.fromRGB(50, 200, 100), "Teleport right 
 end)
 
 createTrollButton("TOUCH BACK FLING", Color3.fromRGB(200, 100, 50), "Fling players when they touch you!", function()
+    if antiFlingEnabled then
+        showInfo("⚠️ Cannot enable! Anti-Fling is ON!")
+        return
+    end
     local success, err = pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/miso517/scirpt/refs/heads/main/main.lua"))()
     end)
@@ -1336,7 +1605,9 @@ end)
 
 trollPage.CanvasSize = UDim2.new(0, 0, 0, trollPage.CanvasSize.Y.Offset + 10)
 
--- Settings Tab Content
+-- ============================================
+-- SETTINGS TAB CONTENT
+-- ============================================
 local colorLabel = Instance.new("TextLabel")
 colorLabel.Size = UDim2.new(1, -4, 0, 26)
 colorLabel.Position = UDim2.new(0, 2, 0, 2)
@@ -1402,20 +1673,61 @@ for i, colorData in ipairs(colors) do
     settingsPage.CanvasSize = UDim2.new(0, 0, 0, settingsPage.CanvasSize.Y.Offset + 32)
 end
 
--- Cleanup on character reset
-player.CharacterAdded:Connect(function()
-    if walkOnAirPad and not walkOnAirEnabled then
-        removeWalkOnAirPad()
+-- ============================================
+-- CLEANUP & RESPAWN HANDLING
+-- ============================================
+player.CharacterAdded:Connect(function(character)
+    if walkOnAirEnabled then
+        task.wait(0.2)
+        if walkOnAirPad then
+            removeWalkOnAirPad()
+        end
+        if walkOnAirConnection then
+            walkOnAirConnection:Disconnect()
+            walkOnAirConnection = nil
+        end
+        enableWalkOnAir()
+    end
+    
+    if noclipEnabled then
+        task.wait(0.2)
+        if noclipConnection then
+            noclipConnection:Disconnect()
+            noclipConnection = nil
+        end
+        enableNoclip()
+    end
+    
+    if antiFlingEnabled then
+        task.wait(0.2)
+        if antiFlingConnection then
+            if antiFlingConnection.RenderStep then
+                antiFlingConnection.RenderStep:Disconnect()
+            end
+            if antiFlingConnection.CharAdded then
+                antiFlingConnection.CharAdded:Disconnect()
+            end
+            antiFlingConnection = nil
+        end
+        enableAntiFling()
     end
 end)
 
--- Opening Animation
+-- ============================================
+-- OPENING ANIMATION
+-- ============================================
 mainFrame.Size = UDim2.new(0, 0, 0, 0)
-mainFrame.Position = UDim2.new(1, -150, 0.5, -math.min(screenSize.Y - 80, 450)/2)
+mainFrame.Position = UDim2.new(1, -150, 0.5, -math.min(screenSize.Y - 80, 500)/2)
 
 playSound("138158731526545")
 local openTween = TweenService:Create(mainFrame, TweenInfo.new(1.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-    Size = UDim2.new(0, 300, 0, math.min(screenSize.Y - 80, 450)),
-    Position = UDim2.new(1, -310, 0.5, -math.min(screenSize.Y - 80, 450)/2)
+    Size = UDim2.new(0, 300, 0, math.min(screenSize.Y - 80, 500)),
+    Position = UDim2.new(1, -310, 0.5, -math.min(screenSize.Y - 80, 500)/2)
 })
 openTween:Play()
+
+print("🐵 Super Secret Grandma Hacks LOADED! 🐵")
+print("👵 Walk on Air - CHECK!")
+print("🚪 Noclip - CHECK!")
+print("🛡️ Anti-Fling - CHECK!")
+print("👵 Grandma is PROTECTED! 👵")
